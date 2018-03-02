@@ -30,7 +30,33 @@ def softmax_loss_naive(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  
+  num_train   = X.shape[0]
+  num_classes = W.shape[1]
+
+  for i in xrange(num_train):
+
+    scores      = X[i].dot(W)
+    scores_shift = scores - scores.max() # to prevent numerical instability
+
+    loss += -np.log(np.exp(scores_shift[y[i]]) / np.sum(np.exp(scores_shift)))
+
+    for j in xrange(num_classes):
+
+      softmax_out = np.exp(scores_shift[j]) / np.sum(np.exp(scores_shift))
+
+      if j == y[i]:
+        dW[:, j] += (-1 + softmax_out) * X[i]
+
+      else:
+        dW[:, j] += softmax_out * X[i]
+
+  loss /= num_train
+
+  # For regularization explanation: see linear_svm.py
+  loss += 0.5 * reg * np.sum(W * W)
+  dW    = dW / num_train + reg * W
+
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################
@@ -54,7 +80,26 @@ def softmax_loss_vectorized(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  
+  num_train   = X.shape[0]
+  num_classes = W.shape[1]
+
+  # Loss
+  scores = X.dot(W)
+
+  # Subtract maximum for each row separately, to prevent numerical instability
+  scores_shift = scores - scores.max(axis=1).reshape(-1, 1)
+  softmax_out = np.exp(scores_shift) / np.sum(np.exp(scores_shift), axis=1).reshape(-1,1)
+  loss = np.sum(-np.log(softmax_out[np.arange(num_train), y]))
+  loss = loss / num_train + 0.5 * reg * np.sum(W * W)
+
+  # Gradient
+  dS = softmax_out.copy()
+  dS[np.arange(num_train), y] += -1
+
+  dW = (X.T).dot(dS)
+  dW = dW / num_train + reg * W
+
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################

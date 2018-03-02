@@ -98,7 +98,9 @@ class KNearestNeighbor(object):
       # points, and store the result in dists[i, :].                        #
       #######################################################################
 
-      dists[i, :] = np.sqrt(np.sum((self.X_train - X[i, :])*(self.X_train - X[i, :]), axis=1))
+      # 2 methods
+      # dists[i, :] = np.sqrt(np.sum((self.X_train - X[i, :])*(self.X_train - X[i, :]), axis=1))
+      dists[i, :] = np.sqrt((self.X_train * self.X_train).sum(axis=1) + (X[i, :] * X[i, :]).sum() - 2 * (self.X_train * X[i, :]).sum(axis=1))
 
       #######################################################################
       #                         END OF YOUR CODE                            #
@@ -130,7 +132,7 @@ class KNearestNeighbor(object):
     
     aSumSquare = (self.X_train*self.X_train).sum(axis=-1)
     bSumSquare = (X*X).sum(axis=-1)
-    mul        = np.dot(self.X_train, X.T)
+    mul        = self.X_train.dot(X.T)
 
     dists = np.sqrt(aSumSquare[:, np.newaxis] + bSumSquare - 2*mul).T
     
