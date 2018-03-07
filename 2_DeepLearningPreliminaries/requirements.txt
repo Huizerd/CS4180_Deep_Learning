@@ -1,0 +1,7 @@
+scipy
+scikit-learn
+pyreadline
+Pillow
+imageio
+jupyter
+matplotlib
