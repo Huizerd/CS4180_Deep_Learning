@@ -1,0 +1,10 @@
+Exercise 4.4
+
+(a) Done
+(b) Allows you to model non-linear relations
+(c) Deeper: parameter efficiency (better performance with fewer parameters), hierchical structure of natural phenomena (images)
+(d) Done
+(e) No idea?
+(f) How?
+(g) A bit higher!
+(h) Generally higher for more units in the hidden layer

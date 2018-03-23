@@ -1,1 +1,5 @@
 **/graphs/
+**/notMNIST*/
+*.tar.gz
+*.pickle
+.idea
