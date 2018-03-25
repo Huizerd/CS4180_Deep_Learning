@@ -20,6 +20,7 @@ n_epochs = 30
 n_train = 60000
 n_test = 10000
 
+tf.reset_default_graph()
 
 # Step 1: Read in data
 mnist_folder = 'data/mnist'
@@ -31,7 +32,6 @@ train, val, test = utils.read_mnist(mnist_folder, flatten=True)
 train_data = tf.data.Dataset.from_tensor_slices(train)
 train_data = train_data.shuffle(10000)  # if you want to shuffle your data
 train_data = train_data.batch(batch_size)
-
 
 # create testing Dataset and batch it
 test_data = tf.data.Dataset.from_tensor_slices(test)
@@ -63,7 +63,7 @@ logits = tf.matmul(img, w) + b
 
 # Step 5: define loss function
 # use cross entropy of softmax of logits as the loss function
-entropy = tf.nn.softmax_cross_entropy_with_logits(labels=label, logits=logits, name='entropy')
+entropy = tf.nn.softmax_cross_entropy_with_logits_v2(labels=label, logits=logits, name='entropy')
 loss    = tf.reduce_mean(entropy, name='loss')
 
 
@@ -77,10 +77,15 @@ preds = tf.nn.softmax(logits)
 correct_preds = tf.equal(tf.argmax(preds, 1), tf.argmax(label, 1))
 accuracy = tf.reduce_sum(tf.cast(correct_preds, tf.float32))
 
-writer = tf.summary.FileWriter('./graphs/logreg', tf.get_default_graph())
+tf.summary.scalar('accuracy', accuracy)
+tf.summary.scalar('loss', loss)
+merged_summary = tf.summary.merge_all()
+writer = tf.summary.FileWriter('./graphs/logreg')
+
 with tf.Session() as sess:
 
     start_time = time.time()
+    writer.add_graph(sess.graph)
     sess.run(tf.global_variables_initializer())
 
     # train the model n_epochs times
@@ -90,11 +95,12 @@ with tf.Session() as sess:
         n_batches = 0
         try:
             while True:
-                _, l = sess.run([optimizer, loss])
+                _, l, s = sess.run([optimizer, loss, merged_summary])
                 total_loss += l
                 n_batches += 1
         except tf.errors.OutOfRangeError:
             pass
+        writer.add_summary(s, n_batches)
         print('Average loss epoch {0}: {1}'.format(i, total_loss/n_batches))
         # tf.summary.scalar('total loss', total_loss) no clue
         # writer.add_summary(loss_summary, i)
@@ -111,6 +117,7 @@ with tf.Session() as sess:
         pass
 
     print('Accuracy {0}'.format(total_correct_preds/n_test))
+
 writer.close()
 
 """
@@ -119,6 +126,6 @@ Exercise 4.3
 (a) Done
 (b) Done
 (c) Done
-(d) How? --> ask
+(d) https://www.tensorflow.org/programmers_guide/summaries_and_tensorboard
 (e) 92%
 """

@@ -1,0 +1,38 @@
+Exercise 5.1
+
+(a) Done
+(b) Done
+(c) The first 2 dimensions depend on the height and width of the input image, the stride of the convolution, your kernel/filter size and whether or not you use same or valid padding. The third dimension represents the output of each of the kernels.
+(d) An image can be padded with 0's at the edge in order to preserve its size if your kernel > 1 pixel. A stride of 2 means skipping 1 pixel every time, effectively decreasing the size of the output by 2.
+(e) Pooling, especially max pooling, because it tends to keep the most important responses. A larger stride is very aggressive, since you are just throwing away information instead of selecting the most important information.
+
+Exercise 5.2
+
+(a) Done
+(b) Done
+(c) Done
+(d) The input tensor consists of images of shape 28 x 28 x 1, since grayscale. layer1_weights has the shape of the kernel that slides over the image in the first 2 dimensions (5 x 5), the number of channels of the image in the third dimension (1 due to grayscale), and the depth of the output in the fourth dimension (16). layer1_biases has shape 16.
+(e) Input image, kernel/filter, strides, padding, where strides is a 1D tensor of length 4, with the stride for each of the dimensions of input (which are batch size, image height, image width, channels). In our model, stride is 2 for the image height and width and same padding is used, so our output will have shape 10 x 14 x 14 x 16 (with 10 as batch size and 16 due to the output depth of layer1_weights).
+(f) 16 filters, 1 for each layer in the fourth dimension of layer1_weights. The size of the kernel/filter sliding over the image is 5 x 5. It does have a third dimension, which is 1 since the image is in grayscale. Same padding with strides of 2 in the dimensions of image height and width is used. The output of conv1 is 10 x 14 x 14 x 16 (batch size, image height / stride, image width / stride, output depth or number of filters)
+(g) We add the layer1_bias tensor (which has a shape of 16, so is added along the fourth dimension), and take the ReLU. Shape is still equal the output from conv1!
+(h) The same as the output of hidden1, with shape 10 x 14 x 14 x 16.
+(i) 16 again, 1 for each layer in the fourth dimension of layer2_weights. Now, the third dimension of the filter has size 16, due to the input size of hidden1 in the fourth dimension (this was 1 before with the input image). Stride is 2 again for the second and third dimension of hidden1, padding is same. Therefore, the shape of conv2 is 10 x 7 x 7 x 16 (batch size, half the size of hidden1, half the size of hidden1, number of filters).
+(j) Add biases, take ReLU. layer2_biases has shape 16, so is added to the fourth dimension of conv2. The biases are all 1. hidden2 has the same shape as conv2, 10 x 7 x 7 x 16.
+(k) hidden2 is the input to the third layer, which is a fully connected layer. Therefore, all dimensions but the first are 'flattened' into 1 long tensor, so we have a tensor of 7 x 7 x 16 = 784 for each image (or what's left of it) in the batch. This reshape has to happen, because fully connected layers only deal with 1D tensors (per input image).
+(l) Take ReLU of the matrix multiplication of hidden3 (which now has shape 10 x 784) and layer3_weights (shape 784 x 64, 64 being the number of hidden neurons). So, we need a row in the weight matrix for each input tensor, and a column for each neuron. Also, we need a bias for each neuron.
+(m) The output is hidden3, a tensor with shape 10 x 64, which was condensed from the 10 x 784 tensor that we had at the end of the previous layer.
+(n) hidden3 is the input to the fourth layer.
+(o) In the fourth layer, which is another fully connected layer, the tensors for each input image are condensed from 64 to 10 (equal to number of labels!) through a matrix multiplication (layer4_weights has shape 64 x 10) and addition of bias (shape 10).
+(p) Scores for each class/label.
+(q) Scores have to be converted to probabilities using softmax, while minimizing cross-entropy.
+(r) Layer 1: 5 x 5 x 1 x 16 + 16 (can biases be trained?) = 416, layer 2: 5 x 5 x 16 x 16 + 16 = 6416, layer 3: 784 x 64 + 64 = 50240 (most!), layer 4: 64 x 10 + 10 = 650.
+(s) Done
+(t) 89.1 %
+
+Exercise 5.3
+
+(a)
+(b)
+(c)
+(d)
+(e)

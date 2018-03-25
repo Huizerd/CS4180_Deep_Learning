@@ -5,6 +5,6 @@ Exercise 4.4
 (c) Deeper: parameter efficiency (better performance with fewer parameters), hierchical structure of natural phenomena (images)
 (d) Done
 (e) No idea?
-(f) How?
+(f) https://www.tensorflow.org/programmers_guide/summaries_and_tensorboard
 (g) A bit higher!
 (h) Generally higher for more units in the hidden layer
