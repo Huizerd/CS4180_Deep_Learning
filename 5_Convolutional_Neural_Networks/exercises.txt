@@ -27,12 +27,17 @@ Exercise 5.2
 (q) Scores have to be converted to probabilities using softmax, while minimizing cross-entropy.
 (r) Layer 1: 5 x 5 x 1 x 16 + 16 (can biases be trained?) = 416, layer 2: 5 x 5 x 16 x 16 + 16 = 6416, layer 3: 784 x 64 + 64 = 50240 (most!), layer 4: 64 x 10 + 10 = 650.
 (s) Done
-(t) 89.1 %
+(t) 89.4%
 
 Exercise 5.3
 
-(a)
+(a) Done, 89.4% so same!
 (b)
-(c)
-(d)
-(e)
+- Only convolution, no pooling (because faster, no loss in accuracy: https://arxiv.org/pdf/1412.6806.pdf) --> 90.0%
+- 2000 epochs --> 91.3%, 3000 epochs --> 91.1%, so keep at 2000
+- Adam optimizer, learning rate 0.005 --> 91.4%, learning rate 0.002 --> 92.3%
+- Adagrad optimizer, learning rate 0.05 --> 92.4% (2500 epochs --> 92.2%)
+- 128 hidden units + Adam --> 91.8%, 32 hidden units --> 91.7%
+(c) b2 depends on the number of examples in the dataset (10 for a batch of training, 10000 for validation and test). num depends on the number pixels in the input image, as long as this is constant it can be a constant (784).
+(d) Done
+(e) Ok!
