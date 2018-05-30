@@ -1,0 +1,15 @@
+# Standard
+# ============
+* text=auto
+
+# Source files
+# ============
+*.py text
+*.sh text
+*.ipynb text
+*.txt text
+
+# Binary files
+# ============
+*.pickle binary
+*.pdf binary
